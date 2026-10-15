@@ -27,3 +27,5 @@ The booking transaction checks the calendar revision and every participant's loc
 Firedrill integration will be added against the qualified new release. The retired interface is not used. This repository is private and has no selected public license.
 
 Implementation reference: [OpenAI Agents SDK tools](https://openai.github.io/openai-agents-python/tools/).
+
+Explore related applications in the [Firedrill example catalog](https://github.com/firedrill-tools/firedrill-example-catalog). Product and setup references: [Firedrill](https://firedrill.run/) and the [official developer documentation](https://docs.firedrill.run/). Use documentation matching the qualified release; this repository records its current integration limits above.
