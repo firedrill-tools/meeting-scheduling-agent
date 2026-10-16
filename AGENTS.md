@@ -1,7 +1,11 @@
 # Working rules
 
-Keep all calendar and outbox data synthetic. Preserve local time-zone checks, the optimistic revision check, booking idempotency and the read-only gate. Do not claim an agent booked a meeting unless the database contains the event; do not claim an email was sent when only the synthetic outbox changed.
+Keep all calendar/outbox data synthetic and use the actual Agents SDK Runner/OpenAI Responses path. No retired Firedrill client, fake provider result or fabricated email delivery. Raw provider completion must precede tool dispatch; preserve independent original usage/failures without guessing totals or billing. Own clients/cancellation and disable tracing per run without global client/cache patches.
 
-Offline tool invocations are not live model proof. Add Firedrill integration only against a verified new release.
+Caller write permission is separate from task data. A booking needs exact caller day/participants/duration and an offer actually observed in the run. Cancellation needs its fixed target and a separate grant. Stable request IDs bind original payload/operation; exact retries recover, changed intent fails. Never resurrect a cancelled booking or confirm another request's event. Retain old confirmations, cancellation history and unrelated busy rows.
 
-Bind confirmations to the caller's fixed request ID. New bookings must match an exact offer actually listed in that run (time/participants/duration/revision); exact previously committed request recovery remains idempotent. Preserve half-hour UTC starts and second/microsecond-accurate local work bounds. Native provider/data/distribution and cancellation follow-up remain in PLAN.md.
+Tools must remain true async functions: the pinned SDK offloads sync functions to threads that can outlive cancellation. Keep run/deadline guards inside every mutation transaction before commit, bounded SQLite waits, owned tool concurrency/budgets and exact time boundaries. A cancelled await does not prove an earlier action was rolled back. Recording failure must stop later writes; preserve actual state after committed/uncertain failures and never blindly retry.
+
+Use strict coherent bounded fixtures and private exclusive new DB initialization. Ten hash-bound profiles include human_import history with no model measurements. Manifest focus stays out of target context; case selection never grants write permission. Preserve dataset/source hashes, actual SQL snapshots and separate normalized SDK/raw HTTP/tool events.
+
+Run deterministic data checks, meaningful native/state/CLI tests and fresh locked wheel/sdist qualification after relevant changes. Live semantic judgment, qualified new Firedrill integration and publication/license remain gates in PLAN.md. Keep the repo private.

@@ -1,0 +1,28 @@
+{
+  "people": [
+    {
+      "id": "aria",
+      "name": "Aria Vale",
+      "email": "aria@calendar.example",
+      "timezone": "Pacific/Auckland",
+      "work_start": 9,
+      "work_end": 17
+    },
+    {
+      "id": "noa",
+      "name": "Noa Reed",
+      "email": "noa@calendar.example",
+      "timezone": "Pacific/Fiji",
+      "work_start": 9,
+      "work_end": 17
+    }
+  ],
+  "busy": [],
+  "synthetic": true,
+  "dataset": {
+    "id": "synthetic-scheduling-cases",
+    "version": 1,
+    "profile": "boundary",
+    "case_id": "utc-day-boundary"
+  }
+}

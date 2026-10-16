@@ -7,6 +7,9 @@ from agents.tool_context import ToolContext
 
 from meeting_scheduler.agent import SchedulingContext, book_slot, list_available_slots, send_confirmation
 from meeting_scheduler.calendar import CalendarStore, parse_utc
+from meeting_scheduler.schemas import BookingScope
+
+SCOPE=BookingScope(day="2026-11-05",participant_ids=("mira","leo"),duration_minutes=30)
 
 
 FIXTURE = Path(__file__).parents[1] / "fixtures/starter.json"
@@ -89,7 +92,7 @@ def test_actual_agents_sdk_tools_use_run_context_and_write_gate(tmp_path):
 
 def test_actual_agents_sdk_tools_book_and_confirm_when_enabled(tmp_path):
     store = seeded(tmp_path)
-    shared=SchedulingContext(store, "req-enabled", True)
+    shared=SchedulingContext(store, "req-enabled", True,booking_scope=SCOPE)
     def invoke(tool, args):
         encoded = json.dumps(args)
         context = ToolContext(shared,
@@ -115,22 +118,22 @@ def invoke_as(tool,context,args):
 def test_confirmation_tool_cannot_use_another_requests_event(tmp_path):
     store=seeded(tmp_path)
     event=store.book('other-request','2026-11-05T15:00:00Z',30,['mira','leo'],0)
-    result=invoke_as(send_confirmation,SchedulingContext(store,'new-request',True),{'event_id':event['event_id']})
+    result=invoke_as(send_confirmation,SchedulingContext(store,'new-request',True,booking_scope=SCOPE),{'event_id':event['event_id']})
     assert 'another request' in result and store.snapshot()['outbox']==[]
-    own=invoke_as(send_confirmation,SchedulingContext(store,'other-request',True),{'event_id':event['event_id']})
+    own=invoke_as(send_confirmation,SchedulingContext(store,'other-request',True,booking_scope=SCOPE),{'event_id':event['event_id']})
     assert json.loads(own)['event_id']==event['event_id'] and len(store.snapshot()['outbox'])==1
 
 
 def test_new_booking_requires_the_actual_run_to_have_listed_its_exact_offer(tmp_path):
-    store=seeded(tmp_path);context=SchedulingContext(store,'scoped-request',True)
+    store=seeded(tmp_path);context=SchedulingContext(store,'scoped-request',True,booking_scope=SCOPE)
     args={'start_utc':'2026-11-05T15:00:00Z','duration_minutes':30,'participant_ids':['mira','leo'],'expected_revision':0}
     assert 'not listed' in invoke_as(book_slot,context,args) and store.snapshot()['meetings']==[]
     invoke_as(list_available_slots,context,{'day':'2026-11-05','participant_ids':['mira','leo'],'duration_minutes':30})
     wrong={**args,'participant_ids':['mira','sam']}
-    assert 'not listed' in invoke_as(book_slot,context,wrong) and store.snapshot()['meetings']==[]
+    assert 'outside the caller' in invoke_as(book_slot,context,wrong) and store.snapshot()['meetings']==[]
     event=json.loads(invoke_as(book_slot,context,args));assert len(store.snapshot()['meetings'])==1
     # A restart can read the exact already-committed request without rebooking.
-    retried=json.loads(invoke_as(book_slot,SchedulingContext(store,'scoped-request',True),args))
+    retried=json.loads(invoke_as(book_slot,SchedulingContext(store,'scoped-request',True,booking_scope=SCOPE),args))
     assert retried['event_id']==event['event_id'] and len(store.snapshot()['meetings'])==1
 
 

@@ -1,0 +1,28 @@
+{
+  "people": [
+    {
+      "id": "mira",
+      "name": "Mira Chen",
+      "email": "mira@calendar.example",
+      "timezone": "America/Toronto",
+      "work_start": 9,
+      "work_end": 10
+    },
+    {
+      "id": "leo",
+      "name": "Leo Grant",
+      "email": "leo@calendar.example",
+      "timezone": "Asia/Singapore",
+      "work_start": 9,
+      "work_end": 10
+    }
+  ],
+  "busy": [],
+  "synthetic": true,
+  "dataset": {
+    "id": "synthetic-scheduling-cases",
+    "version": 1,
+    "profile": "ambiguous",
+    "case_id": "no-overlap"
+  }
+}

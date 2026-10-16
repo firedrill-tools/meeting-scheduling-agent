@@ -1,0 +1,28 @@
+{
+  "people": [
+    {
+      "id": "mira",
+      "name": "Mira Chen",
+      "email": "mira@harbor.example",
+      "timezone": "America/Toronto",
+      "work_start": 9,
+      "work_end": 17
+    },
+    {
+      "id": "leo",
+      "name": "Leo Grant",
+      "email": "leo@northstar.example",
+      "timezone": "Europe/London",
+      "work_start": 9,
+      "work_end": 17
+    }
+  ],
+  "busy": [],
+  "synthetic": true,
+  "dataset": {
+    "id": "synthetic-scheduling-cases",
+    "version": 1,
+    "profile": "boundary",
+    "case_id": "dst-us-transition"
+  }
+}

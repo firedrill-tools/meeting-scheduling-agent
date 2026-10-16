@@ -1,14 +1,22 @@
-# Meeting scheduling scenarios
+# Scheduling scenarios
 
-Initialize a fresh database from `fixtures/starter.json` for each independent case. The fixture has Toronto and London participants with two existing busy blocks on 2026-11-05.
+All records and product/person names are synthetic. Prior meetings/notifications are human_import, not model executions. Initialize a new private DB for an independent journey; preserve receipts when resetting. Focus below describes review criteria, not seeded model replies or semantic pass scores. Run without a write flag for planning; --allow-book/--allow-cancel explicitly grants the selected operation.
 
-| Case | Request | Expected behavior |
-|---|---|---|
-| Available overlap | Find a 30-minute meeting for Mira and Leo on 2026-11-05. | Offer 15:00 UTC (10:00 Toronto, 15:00 London). Do not offer Mira's 14:00–15:00 conflict or Leo's 16:00–17:00 conflict. |
-| Booking | With `--allow-book`, book the listed time and confirm it. | One meeting record and one synthetic outbox entry, with the exact participant set. |
-| Changed availability | List 15:00, then add a busy block for Mira at 15:00 before booking. | Reject the old revision; the agent should list again. |
-| Duplicate request | Repeat the same `--request-id` and exact booking. | Return the existing event; do not add a second busy block or email. A different payload with the same ID is rejected. |
-| Read-only | Omit `--allow-book`. | The agent can discuss availability but booking and confirmation tools reject writes. |
-| Missing person | Request an unknown participant ID. | Tool returns a clear error; no event is created. |
+| Case | Focus |
+|---|---|
+| starter | Named timezone lookup, observed slot, exact caller scope, committed booking and synthetic confirmation. |
+| busy | Twelve people/eighteen prior meetings/24 external blocks with retained human confirmation/cancellation history. |
+| ambiguous-name | Two Mira Chen identities require clarification; do not guess. |
+| no-overlap | Toronto/Singapore one-hour local windows have no common slot. |
+| availability-change | Preferred 15:00 is blocked; choose another current offer. Use block between list/book for a real revision-change fault. |
+| dst-uk-transition | Toronto/London offsets after the UK autumn change; do not assume a constant difference. |
+| dst-us-transition | Same participants after the US/Canada change, with a different overlap. |
+| utc-day-boundary | UTC start day includes another local date; a valid local-workday booking can end on the next UTC date. |
+| cancel-scheduled | Fixed target, current revision, retained old confirmation and a separate synthetic cancellation notice. |
+| cancel-recovery | Original human cancellation already exists; inspect original reason and queue only its missing notice. |
 
-The offline suite verifies the calendar and decorated SDK tools, not the model's choice of tool calls or phrasing. Live quality and usage need a provider key.
+Actual SDK/HTTP checks cover missing/incomplete/failed status, refusal, unsupported/mixed/replayed tool output, raw usage, model/tool budgets, raw type coercion, client startup/error/cancel/deadline cleanup and committed cancellation followed by provider failure. State checks cover separate-process-style SQLite writer connections, identical request recovery, competing revisions/cancellations and inside-transaction deadline rollback. Tools no longer detach write threads. Loopback CLI checks prove native booking/cancellation and both signals.
+
+Receipt faults before request/response/book/confirmation and final persistence preserve whether a meeting already exists; no automatic second mutation runs. Generated prose remains a draft explanation. Verify request-specific actual_effects and SQLite state, and use live/human review for identity resolution, intent, unsupported promises and local-time explanation. Outbox state never proves email delivery.
+
+The versioned manifest binds exact fixture bytes/identity/populations and task selection. Assessment focus never enters the prompt, and selected tasks do not grant writes. No raw usage, model trials or costs are seeded.

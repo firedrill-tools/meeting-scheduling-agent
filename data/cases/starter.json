@@ -1,0 +1,47 @@
+{
+  "people": [
+    {
+      "id": "mira",
+      "name": "Mira Chen",
+      "email": "mira@harbor.example",
+      "timezone": "America/Toronto",
+      "work_start": 9,
+      "work_end": 17
+    },
+    {
+      "id": "leo",
+      "name": "Leo Grant",
+      "email": "leo@northstar.example",
+      "timezone": "Europe/London",
+      "work_start": 9,
+      "work_end": 17
+    },
+    {
+      "id": "sam",
+      "name": "Sam Patel",
+      "email": "sam@harbor.example",
+      "timezone": "America/Toronto",
+      "work_start": 9,
+      "work_end": 17
+    }
+  ],
+  "busy": [
+    {
+      "person_id": "mira",
+      "start_utc": "2026-11-05T14:00:00Z",
+      "end_utc": "2026-11-05T15:00:00Z"
+    },
+    {
+      "person_id": "leo",
+      "start_utc": "2026-11-05T16:00:00Z",
+      "end_utc": "2026-11-05T17:00:00Z"
+    }
+  ],
+  "synthetic": true,
+  "dataset": {
+    "id": "synthetic-scheduling-cases",
+    "version": 1,
+    "profile": "starter",
+    "case_id": "starter"
+  }
+}

@@ -1,9 +1,10 @@
 [project]
 name = "meeting-scheduling-agent"
-version = "0.1.0"
+version = "0.2.0"
+readme = "README.md"
 description = "Synthetic calendar meeting scheduling with OpenAI Agents SDK"
 requires-python = ">=3.12"
-dependencies = ["openai-agents==0.23.1"]
+dependencies = ["openai-agents==0.23.1", "openai==3.31.0", "httpx2==2.13.1", "pydantic==2.14.1"]
 
 [project.optional-dependencies]
 test = ["pytest>=8,<10"]
@@ -20,3 +21,9 @@ packages = ["src/meeting_scheduler"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"data" = "meeting_scheduler/sample_data"
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "data", "fixtures", "tests", "scripts", "scenarios", "README.md", "AGENTS.md", "PLAN.md", "COMPATIBILITY.md", ".env.example", "pyproject.toml", "uv.lock"]

@@ -1,18 +1,24 @@
 # Meeting scheduling requirement audit
 
-## Reproduced and corrected first gaps
+## Completed standalone work
 
-- The actual decorated confirmation tool accepted an event belonging to another request and added its outbox entry. Tool calls now bind confirmation to the caller's fixed request ID.
-- A booking at 15:07:01 was accepted even though listing offered only a half-hour grid. New bookings now require an exact offer actually observed in the run, with participant/duration/revision identity. The store rejects off-grid/seconds/microseconds starts. Exact already-committed request recovery remains idempotent.
-- Working-hour comparison discarded end seconds/microseconds; an end after 17:00 was accepted. Exact local clock bounds now apply.
+1. **Calendar state:** strict bounded synthetic fixtures, private DB/journals, coherent people/blocks/imported meetings, single-transaction snapshots, exact local/UTC/DST/date endpoints and true concurrent request/revision checks. Legacy schema upgrades preserve history without invented model evidence.
+2. **Cancellation:** explicit separate caller target grant, original-intent inspection, transactional cancellation, exact retry/cross-operation identity, retained confirmations/history and separate cancellation notices. Cancelled original requests never resurrect an event.
+3. **Native runtime:** actual Agents SDK/OpenAIResponsesModel/owned AsyncOpenAI/HTTPX2 clients, JSON completion before dispatch, raw argument coercion rejection, eight prepared requests/twelve turns/24 tools, no retries, one tool at a time, 2048 output tokens and bounded deadline/cleanup. Per-run tracing disabled. Native failure/partial-commit recovery retains exact business state.
+4. **Data:** ten synthetic-scheduling-cases v1 cases/four profiles. Busy: twelve people, eighteen human-import meetings, 24 external blocks, twelve confirmations, three cancellations and two notices. Manifest focus is outside context; task selection does not grant permission.
+5. **Operations/evidence:** private per-run original HTTP/SDK/tool/source/state receipts; persistence faults refuse later writes and retain already-committed effects. Actual loopback CLI booking/cancellation, error and SIGINT/SIGTERM; packaged case selection/init and fresh locked wheel/sdist outside checkout; exact-head CI/catalog proof.
 
-## Next independent tasks
+## Reproduced gaps fixed
 
-1. Strict bounded fixture/participants/durations/revisions, coherent busy/calendar/outbox state, private SQLite ownership and snapshots that include blocks. Validate DST/local/UTC day boundaries and true concurrency/idempotent recovery.
-2. Explicit cancellation lifecycle and appropriate caller authorization, including no confirmation of cancelled meetings and retained cancellation/outbox history. The current project only creates/confirms, so cancellation coverage remains implementation work.
-3. Actual OpenAI Agents SDK/Responses execution with explicit model/client/backend/key, per-run tracing disabled, native pre-dispatch completion/usage observations, request/tool/time/retry bounds, async cancellation/cleanup and durable evidence. No fabricated model or sent-email claims.
-4. Hash-bound starter/busy/ambiguous/boundary calendars and private initialization/reset, actual CLI HTTP/failure/signal checks, fresh locked wheel/sdist, exact-head CI and catalog proof.
+- Foreign-request confirmation and unlisted 15:07:01 booking. Tools now bind request/event and exact observed scope; store starts stay on the listed grid.
+- Working-hour comparisons lost seconds/microseconds; exact endpoints now apply, including closing midnight.
+- Actual synchronous SDK tool worker committed after its awaited task was cancelled. Tools are now owned async functions with an inside-transaction run/deadline fence; real expiry rolls back.
+- Native SDK already stopped incomplete/failed Responses but accepted absent status before dispatch. Raw completion guards preserve original measurements and stop that path.
+- SDK-normalized argument coercion could erase raw boolean/float/extra-field identity. Raw types are checked before mutation.
+- The original project lacked cancellation lifecycle, explicit caller write scope, retained cancellation history and richer human state. These are now implemented independently of any model quality claim.
 
 ## Parked external gates
 
-Live provider tool choices and user-intent interpretation need an owner-supplied enabled model/key/budget. Released Firedrill persisted scenarios, publication and licensing remain external gates. All calendar and outbox data stay synthetic; an outbox row is not email delivery. Continue independent work.
+Live OpenAI participant interpretation, timezone explanation and scheduling choices need owner-supplied model/key/budget and human review. Current protocol/state fixtures do not establish semantic success, provider retention or billing.
+
+New official Firedrill release/contract, persisted ordinary/negative/recovery runs and exact-release CI remain external. Publication and license ownership remain undecided; repository stays private. Continue the remaining portfolio projects.

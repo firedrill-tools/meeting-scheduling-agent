@@ -1,0 +1,217 @@
+{
+  "id": "synthetic-scheduling-cases",
+  "version": 1,
+  "synthetic": true,
+  "description": "Fictional human-authored business history; no model outputs, provider usage or billing. Selection contains task facts, never write permission. Focus metadata stays outside model context.",
+  "cases": [
+    {
+      "id": "starter",
+      "profile": "starter",
+      "file": "cases/starter.json",
+      "sha256": "7d3fd1375a3cc47f431e20a60a6ca501e818c8db227c60a4c6953aa66542739a",
+      "request": "Find and book 30 minutes for Mira and Leo on UTC day 2026-11-05, then queue a synthetic confirmation.",
+      "request_id": "starter-book",
+      "selection": {
+        "booking_scope": {
+          "day": "2026-11-05",
+          "participant_ids": [
+            "mira",
+            "leo"
+          ],
+          "duration_minutes": 30
+        },
+        "cancel_event_id": null
+      },
+      "people_count": 3,
+      "historical_meetings": 0,
+      "external_blocks": 2,
+      "focus": "Ordinary timezone-aware booking; a synthetic outbox row is not delivered email."
+    },
+    {
+      "id": "busy",
+      "profile": "busy",
+      "file": "cases/busy.json",
+      "sha256": "375e80500fc7eeacbacfc28d08c083ece6634b1b019bc4de1810c278407c7888",
+      "request": "Find and book 30 minutes for Mira and Leo on UTC day 2026-11-05, preserving existing calendar history.",
+      "request_id": "busy-book",
+      "selection": {
+        "booking_scope": {
+          "day": "2026-11-05",
+          "participant_ids": [
+            "mira",
+            "leo"
+          ],
+          "duration_minutes": 30
+        },
+        "cancel_event_id": null
+      },
+      "people_count": 12,
+      "historical_meetings": 18,
+      "external_blocks": 24,
+      "focus": "Twelve people, eighteen prior human meetings, 24 external blocks, twelve confirmations, three cancellations and two cancellation notices. No prior model claims."
+    },
+    {
+      "id": "ambiguous-name",
+      "profile": "ambiguous",
+      "file": "cases/ambiguous-name.json",
+      "sha256": "512bf612cee40fa3397c0057a21d6bf66905f446b7d04340b46cbb0f73ba2c48",
+      "request": "Propose a time for Mira Chen and Leo; ask which Mira if the identity is ambiguous.",
+      "request_id": "ambiguous-plan",
+      "selection": {
+        "booking_scope": null,
+        "cancel_event_id": null
+      },
+      "people_count": 4,
+      "historical_meetings": 0,
+      "external_blocks": 2,
+      "focus": "Two exact Mira Chen identities; retain ambiguity instead of guessing a person."
+    },
+    {
+      "id": "no-overlap",
+      "profile": "ambiguous",
+      "file": "cases/no-overlap.json",
+      "sha256": "1a7f93437df33b9c7479aa837f96b8d5069ce3f701941e3e5c1bf10f778329f6",
+      "request": "Find 30 minutes for Mira and Leo on UTC day 2026-11-05; explain if their work windows do not overlap.",
+      "request_id": "no-overlap-book",
+      "selection": {
+        "booking_scope": {
+          "day": "2026-11-05",
+          "participant_ids": [
+            "mira",
+            "leo"
+          ],
+          "duration_minutes": 30
+        },
+        "cancel_event_id": null
+      },
+      "people_count": 2,
+      "historical_meetings": 0,
+      "external_blocks": 0,
+      "focus": "The two one-hour local work windows have no common UTC time."
+    },
+    {
+      "id": "availability-change",
+      "profile": "boundary",
+      "file": "cases/availability-change.json",
+      "sha256": "909451c47f2b40a615030cb09de08f6d4d279c959ac48aa310eb0717a88b9fbc",
+      "request": "Prefer 15:00 UTC for Mira and Leo, but choose another available half-hour if that time is blocked.",
+      "request_id": "changed-book",
+      "selection": {
+        "booking_scope": {
+          "day": "2026-11-05",
+          "participant_ids": [
+            "mira",
+            "leo"
+          ],
+          "duration_minutes": 30
+        },
+        "cancel_event_id": null
+      },
+      "people_count": 3,
+      "historical_meetings": 0,
+      "external_blocks": 3,
+      "focus": "The preferred slot is blocked; real block commands/native fault checks exercise a revision change after listing."
+    },
+    {
+      "id": "dst-uk-transition",
+      "profile": "boundary",
+      "file": "cases/dst-uk-transition.json",
+      "sha256": "bb4997fbf82a11d7b32fe3f3ebcaa599e58814cb7f82193f3bd167438d30334d",
+      "request": "Find 30 minutes for Mira in Toronto and Leo in London on UTC day 2026-10-29; explain their local times.",
+      "request_id": "dst-uk-transition-book",
+      "selection": {
+        "booking_scope": {
+          "day": "2026-10-29",
+          "participant_ids": [
+            "mira",
+            "leo"
+          ],
+          "duration_minutes": 30
+        },
+        "cancel_event_id": null
+      },
+      "people_count": 2,
+      "historical_meetings": 0,
+      "external_blocks": 0,
+      "focus": "Host IANA timezone rules produce different overlap after the UK and US autumn clock changes; do not reuse an old offset."
+    },
+    {
+      "id": "dst-us-transition",
+      "profile": "boundary",
+      "file": "cases/dst-us-transition.json",
+      "sha256": "2701412e9ae68ad6cf34877a206dfcfa0c8db11b98ceefe48f6343f579528149",
+      "request": "Find 30 minutes for Mira in Toronto and Leo in London on UTC day 2026-11-05; explain their local times.",
+      "request_id": "dst-us-transition-book",
+      "selection": {
+        "booking_scope": {
+          "day": "2026-11-05",
+          "participant_ids": [
+            "mira",
+            "leo"
+          ],
+          "duration_minutes": 30
+        },
+        "cancel_event_id": null
+      },
+      "people_count": 2,
+      "historical_meetings": 0,
+      "external_blocks": 0,
+      "focus": "Host IANA timezone rules produce different overlap after the UK and US autumn clock changes; do not reuse an old offset."
+    },
+    {
+      "id": "utc-day-boundary",
+      "profile": "boundary",
+      "file": "cases/utc-day-boundary.json",
+      "sha256": "b1ac348a37ce6109f6b7d7a57626db5d77f5dc43f8271b2b26b4f2d9054c9427",
+      "request": "Find 60 minutes for Aria and Noa with start on UTC day 2026-11-05; explain when their local date is 2026-11-06.",
+      "request_id": "utc-day-book",
+      "selection": {
+        "booking_scope": {
+          "day": "2026-11-05",
+          "participant_ids": [
+            "aria",
+            "noa"
+          ],
+          "duration_minutes": 60
+        },
+        "cancel_event_id": null
+      },
+      "people_count": 2,
+      "historical_meetings": 0,
+      "external_blocks": 0,
+      "focus": "A UTC start day can contain the next local workday; start-day scope does not require an end on the same UTC date."
+    },
+    {
+      "id": "cancel-scheduled",
+      "profile": "boundary",
+      "file": "cases/cancel-scheduled.json",
+      "sha256": "74ba327aad5961a5bf48d9f7e65cf8a6e16ea0dd8594b88d71eb7cdfcd6b7cab",
+      "request": "Cancel the authorized meeting with reason \"Requester cancelled.\" and queue its synthetic cancellation notice.",
+      "request_id": "new-cancel",
+      "selection": {
+        "booking_scope": null,
+        "cancel_event_id": "human-target-cancel-scheduled"
+      },
+      "people_count": 3,
+      "historical_meetings": 1,
+      "external_blocks": 2,
+      "focus": "Retain the original confirmation and booking history; recover original cancellation intent without another cancellation action."
+    },
+    {
+      "id": "cancel-recovery",
+      "profile": "boundary",
+      "file": "cases/cancel-recovery.json",
+      "sha256": "ea5807bab1f424699dd94811aa6dd7c7cc3e4eab818076e5b215fd4487d953d5",
+      "request": "Recover my original cancellation request, preserve its reason and queue the missing synthetic notice.",
+      "request_id": "recover-cancel",
+      "selection": {
+        "booking_scope": null,
+        "cancel_event_id": "human-target-cancel-recovery"
+      },
+      "people_count": 3,
+      "historical_meetings": 1,
+      "external_blocks": 2,
+      "focus": "Retain the original confirmation and booking history; recover original cancellation intent without another cancellation action."
+    }
+  ]
+}
