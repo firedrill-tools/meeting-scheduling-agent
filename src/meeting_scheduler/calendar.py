@@ -100,9 +100,11 @@ class CalendarStore:
             local_start, local_end = start.astimezone(zone), end.astimezone(zone)
             if local_start.date() != local_end.date() or local_start.weekday() >= 5:
                 return False
-            if local_start.hour * 60 + local_start.minute < person["work_start"] * 60:
+            start_clock=timedelta(hours=local_start.hour,minutes=local_start.minute,seconds=local_start.second,microseconds=local_start.microsecond)
+            end_clock=timedelta(hours=local_end.hour,minutes=local_end.minute,seconds=local_end.second,microseconds=local_end.microsecond)
+            if start_clock < timedelta(hours=person["work_start"]):
                 return False
-            if local_end.hour * 60 + local_end.minute > person["work_end"] * 60:
+            if end_clock > timedelta(hours=person["work_end"]):
                 return False
             for row in db.execute("SELECT start_utc,end_utc FROM busy WHERE person_id=?", (person["id"],)):
                 if start < parse_utc(row["end_utc"]) and end > parse_utc(row["start_utc"]):
@@ -132,6 +134,8 @@ class CalendarStore:
         if duration_minutes < 15 or duration_minutes > 120 or duration_minutes % 15:
             raise ValueError("invalid duration")
         start = parse_utc(start_utc)
+        if start.minute % 30 or start.second or start.microsecond:
+            raise ValueError("start must be on the listed half-hour UTC grid")
         end = start + timedelta(minutes=duration_minutes)
         payload = json.dumps({"start_utc": iso(start), "duration_minutes": duration_minutes,
                               "participant_ids": sorted(participant_ids)}, sort_keys=True)
@@ -165,12 +169,19 @@ class CalendarStore:
             db.execute("INSERT INTO busy VALUES(?,?,?,NULL)", (person_id, iso(start), iso(end)))
             db.execute("UPDATE meta SET value=value+1 WHERE key='revision'")
 
-    def confirm(self, event_id: str) -> dict:
+    def find_request(self, request_id: str) -> dict | None:
+        with self._db() as db:
+            event=db.execute("SELECT * FROM meetings WHERE request_id=?",(request_id,)).fetchone()
+            return dict(event) if event else None
+
+    def confirm(self, event_id: str, *, request_id: str | None = None) -> dict:
         with self._db() as db:
             db.execute("BEGIN IMMEDIATE")
             event = db.execute("SELECT * FROM meetings WHERE event_id=?", (event_id,)).fetchone()
             if event is None:
                 raise ValueError("unknown meeting; cannot send confirmation")
+            if request_id is not None and event["request_id"] != request_id:
+                raise ValueError("meeting belongs to another request; cannot confirm it")
             prior = db.execute("SELECT * FROM outbox WHERE event_id=?", (event_id,)).fetchone()
             if prior:
                 return dict(prior)

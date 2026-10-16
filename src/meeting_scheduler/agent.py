@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import json
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from agents import Agent, RunContextWrapper, Runner, function_tool
 
-from .calendar import CalendarStore
+from .calendar import CalendarStore, iso, parse_utc
 
 
 @dataclass
@@ -16,6 +16,11 @@ class SchedulingContext:
     store: CalendarStore
     request_id: str
     allow_book: bool
+    offers: set[tuple] = field(default_factory=set)
+
+
+def offer_key(start, duration, participants, revision):
+    return (iso(parse_utc(start)), duration, tuple(sorted(participants)), revision)
 
 
 def calendar_tool_error(_ctx, error: Exception) -> str:
@@ -26,7 +31,9 @@ def calendar_tool_error(_ctx, error: Exception) -> str:
 def list_available_slots(ctx: RunContextWrapper[SchedulingContext], day: str,
                          participant_ids: list[str], duration_minutes: int = 30) -> str:
     """List available UTC start times for people on a UTC calendar day; return a revision for booking."""
-    return json.dumps(ctx.context.store.list_slots(day, participant_ids, duration_minutes))
+    result=ctx.context.store.list_slots(day, participant_ids, duration_minutes)
+    ctx.context.offers.update(offer_key(start,duration_minutes,participant_ids,result["revision"]) for start in result["slots_utc"])
+    return json.dumps(result)
 
 
 @function_tool(failure_error_function=calendar_tool_error)
@@ -35,6 +42,12 @@ def book_slot(ctx: RunContextWrapper[SchedulingContext], start_utc: str,
     """Book one listed slot using its calendar revision; fails if availability has changed."""
     if not ctx.context.allow_book:
         raise ValueError("booking is disabled for this run")
+    key=offer_key(start_utc,duration_minutes,participant_ids,expected_revision)
+    prior=ctx.context.store.find_request(ctx.context.request_id)
+    # An exact existing request is a recovery read; a new booking requires an
+    # offer actually observed by this run. The store checks payload equality.
+    if prior is None and key not in ctx.context.offers:
+        raise ValueError("slot was not listed for this run; list slots first")
     return json.dumps(ctx.context.store.book(
         ctx.context.request_id, start_utc, duration_minutes, participant_ids, expected_revision
     ))
@@ -45,7 +58,7 @@ def send_confirmation(ctx: RunContextWrapper[SchedulingContext], event_id: str) 
     """Write one synthetic confirmation to the outbox after an event has been booked."""
     if not ctx.context.allow_book:
         raise ValueError("sending is disabled for this run")
-    return json.dumps(ctx.context.store.confirm(event_id))
+    return json.dumps(ctx.context.store.confirm(event_id,request_id=ctx.context.request_id))
 
 
 def run_agent(store: CalendarStore, request: str, request_id: str,
