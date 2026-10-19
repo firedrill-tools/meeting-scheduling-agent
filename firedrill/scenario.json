@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "2026-10-14",
+  "name": "meeting-scheduling-agent \u2014 actual native application",
+  "target": {
+    "kind": "command",
+    "argv": [
+      "node",
+      "firedrill/target.mjs"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "starter",
+      "name": "Explicit synthetic booking permission",
+      "input": {
+        "caseId": "starter",
+        "action": "run",
+        "allowBook": true,
+        "allowCancel": false
+      }
+    },
+    {
+      "id": "ambiguous-name",
+      "name": "Read without booking or cancellation grants",
+      "input": {
+        "caseId": "ambiguous-name",
+        "action": "run",
+        "allowBook": false,
+        "allowCancel": false
+      }
+    },
+    {
+      "id": "busy-inspection",
+      "name": "Inspect actual prior calendar/outbox history",
+      "input": {
+        "caseId": "busy",
+        "action": "inspect",
+        "allowBook": false,
+        "allowCancel": false
+      }
+    }
+  ],
+  "repetitions": 1,
+  "concurrency": 1,
+  "limits": {
+    "timeoutMs": 240000,
+    "maxRuns": 3,
+    "maxOutputBytes": 4194304
+  }
+}

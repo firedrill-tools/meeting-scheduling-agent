@@ -64,5 +64,8 @@ with TemporaryDirectory(prefix='scheduling-distribution-') as directory:
     extracted=temp/'source';extracted.mkdir()
     with tarfile.open(sdist) as archive:archive.extractall(extracted,filter='data')
     source,=extracted.iterdir();assert (source/'uv.lock').exists();run([UV,'sync','--locked','--no-dev','--no-editable','--project',str(source)],temp)
+    assert (source/'firedrill/scenario.json').exists() and not (source/'firedrill/node_modules').exists()
+    run(['npm','ci','--prefix','firedrill','--ignore-scripts','--no-audit','--no-fund'],source)
+    run(['npm','test','--prefix','firedrill'],source)
     source_case=temp/'source-case';source_case.mkdir();exercise(source/'.venv/bin/python',source_case)
 print('Fresh locked wheel and sdist verified outside checkout: console/module CLI, ten private calendars, key-preflight receipts, real busy state, booking/confirmation/cancellation and exact recovery. No live model or email-delivery claim.')

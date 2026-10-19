@@ -8,4 +8,8 @@ Tools must remain true async functions: the pinned SDK offloads sync functions t
 
 Use strict coherent bounded fixtures and private exclusive new DB initialization. Ten hash-bound profiles include human_import history with no model measurements. Manifest focus stays out of target context; case selection never grants write permission. Preserve dataset/source hashes, actual SQL snapshots and separate normalized SDK/raw HTTP/tool events.
 
-Run deterministic data checks, meaningful native/state/CLI tests and fresh locked wheel/sdist qualification after relevant changes. Live semantic judgment, qualified new Firedrill integration and publication/license remain gates in PLAN.md. Keep the repo private.
+Run deterministic data checks, meaningful native/state/CLI tests and fresh locked wheel/sdist qualification after relevant changes. Live semantic judgment, authenticated persisted Firedrill runs and publication/license remain gates in PLAN.md. Keep the repo private.
+
+## Current Firedrill integration
+
+Released CLI/SDK 2.2.2, current command invocation, remote operator MCP and recovery are documented in [firedrill/README.md](firedrill/README.md). Offline checks exercise actual state and native key preflight; authenticated persisted runs and live quality/cost remain separate gates.

@@ -80,3 +80,7 @@ Live provider judgment/budget, the new released Firedrill integration/persisted 
 References: [OpenAI Agents SDK tools](https://openai.github.io/openai-agents-python/tools/), [models and providers](https://developers.openai.com/api/docs/guides/agents/models), [Runner configuration](https://openai.github.io/openai-agents-python/ref/run/).
 
 Explore the [Firedrill catalog](https://github.com/firedrill-tools/firedrill-example-catalog), [Firedrill](https://firedrill.run/) and [official documentation](https://docs.firedrill.run/). Use documentation matching the qualified release.
+
+## Current Firedrill integration
+
+Released CLI/SDK 2.2.2, current command invocation, remote operator MCP and recovery are documented in [firedrill/README.md](firedrill/README.md). Offline checks exercise actual state and native key preflight; authenticated persisted runs and live quality/cost remain separate gates.
