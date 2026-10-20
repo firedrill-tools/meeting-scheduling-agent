@@ -2,6 +2,8 @@
 
 A standalone OpenAI Agents SDK application for a synthetic calendar. It resolves people, finds timezone-aware slots, books an observed offer, queues a confirmation, and cancels an explicitly authorized event while retaining history. All calendar/outbox data is local. An outbox row never means real email was sent.
 
+This example repository is publicly viewable. A project license has not been selected.
+
 ## Simulate with Firedrill
 
 [Firedrill](https://firedrill.run/) is a simulation platform for AI agents.
@@ -89,7 +91,7 @@ uv run --locked python scripts/check_distribution.py
 
 82 offline checks cover actual SDK HTTP/CLI booking/cancellation, original failure measurements, concurrent writes, deadline rollback, retries, raw type coercion, persistence faults, private data and signals. A synthetic malformed usage case exposes an SDK serializer warning; original values remain in evidence. Fresh locked wheel/sdist checks run outside the checkout with all ten calendars and real booking/cancellation/recovery operations. These are protocol/state proofs, not live tool-choice or scheduling-quality scores. See [scenarios](scenarios/README.md), [compatibility](COMPATIBILITY.md) and [plan](PLAN.md).
 
-Live provider judgment/budget, authenticated persisted Firedrill scenarios, publication and license choice remain parked. This repository is private and no public license has been selected.
+Live provider judgment/budget, authenticated persisted Firedrill scenarios, and license choice remain parked. This repository is publicly viewable; no project license has been selected.
 
 References: [OpenAI Agents SDK tools](https://openai.github.io/openai-agents-python/tools/), [models and providers](https://developers.openai.com/api/docs/guides/agents/models), [Runner configuration](https://openai.github.io/openai-agents-python/ref/run/).
 
