@@ -95,7 +95,7 @@ Live provider judgment/budget, authenticated persisted Firedrill scenarios, and 
 
 References: [OpenAI Agents SDK tools](https://openai.github.io/openai-agents-python/tools/), [models and providers](https://developers.openai.com/api/docs/guides/agents/models), [Runner configuration](https://openai.github.io/openai-agents-python/ref/run/).
 
-Explore the [Firedrill catalog](https://github.com/firedrill-tools/firedrill-example-catalog), [Firedrill](https://firedrill.run/) and [official documentation](https://docs.firedrill.run/). Use documentation matching the qualified release.
+Explore the [Firedrill examples](https://docs.firedrill.run/guides/examples), [Firedrill](https://firedrill.run/) and [official documentation](https://docs.firedrill.run/). Use documentation matching the qualified release.
 
 ## Current Firedrill integration
 
