@@ -1,6 +1,20 @@
-# Meeting scheduling agent
+# Meeting scheduling agent with OpenAI Agents SDK
 
 A standalone OpenAI Agents SDK application for a synthetic calendar. It resolves people, finds timezone-aware slots, books an observed offer, queues a confirmation, and cancels an explicitly authorized event while retaining history. All calendar/outbox data is local. An outbox row never means real email was sent.
+
+## Simulate with Firedrill
+
+[Firedrill](https://firedrill.run/) is a simulation platform for AI agents.
+Start from this repository’s root:
+
+```sh
+npx firedrill-run init
+```
+
+Sign in and choose your project, then follow the [simulation run guide](firedrill/README.md)
+for application dependencies, a preview and the reviewed scenarios. Your agent runs
+locally or in your CI; model credentials stay separate from Firedrill sign-in.
+The included recipes record outcomes without an automatic quality score or CI gate.
 
 ## Run
 
@@ -75,7 +89,7 @@ uv run --locked python scripts/check_distribution.py
 
 82 offline checks cover actual SDK HTTP/CLI booking/cancellation, original failure measurements, concurrent writes, deadline rollback, retries, raw type coercion, persistence faults, private data and signals. A synthetic malformed usage case exposes an SDK serializer warning; original values remain in evidence. Fresh locked wheel/sdist checks run outside the checkout with all ten calendars and real booking/cancellation/recovery operations. These are protocol/state proofs, not live tool-choice or scheduling-quality scores. See [scenarios](scenarios/README.md), [compatibility](COMPATIBILITY.md) and [plan](PLAN.md).
 
-Live provider judgment/budget, the new released Firedrill integration/persisted scenarios, publication and license choice remain parked. This repository is private and no public license has been selected.
+Live provider judgment/budget, authenticated persisted Firedrill scenarios, publication and license choice remain parked. This repository is private and no public license has been selected.
 
 References: [OpenAI Agents SDK tools](https://openai.github.io/openai-agents-python/tools/), [models and providers](https://developers.openai.com/api/docs/guides/agents/models), [Runner configuration](https://openai.github.io/openai-agents-python/ref/run/).
 
